@@ -25,11 +25,29 @@
 
 .album-grid {
     display: flex;
-    gap: 2px; // Very tight gap like the reference
-    height: 400px;
+    flex-wrap: wrap; // Allow cards to wrap to next row
+    gap: 1.5rem; // Increased gap for better spacing between rows
+    padding: 1.5rem;
+    height: auto;
+    max-height: calc(100vh - 200px); // Scroll if many rows
     width: 100%;
-    border: 1px solid #e0e0e0;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    align-content: flex-start; // Items start from top
+
+    // Custom scrollbar for better aesthetics
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 10px;
+    }
 }
 
 .modal-overlay {

@@ -3,6 +3,7 @@ import '../styles/components/Dashboard.scss';
 import AlbumCard from './AlbumCard';
 import { useAlbum } from '../context/AlbumContext';
 import { generateAlbumCode } from '../utils/albumCreation';
+import { motion } from 'framer-motion';
 
 const Dashboard: React.FC = () => {
     const { libraryRoot, openAlbum } = useAlbum();
@@ -57,11 +58,11 @@ const Dashboard: React.FC = () => {
                     <p>Você ainda não tem álbuns. Crie a sua primeira memória.</p>
                 </div>
             ) : (
-                <div className="album-grid">
+                <motion.div className="album-grid" layout>
                     {albums.map((album, index) => (
-                        <AlbumCard key={index} album={album} onOpenAlbum={openAlbum} />
+                        <AlbumCard key={album.name} album={album} onOpenAlbum={openAlbum} />
                     ))}
-                </div>
+                </motion.div>
             )}
 
             {showCreateModal && (

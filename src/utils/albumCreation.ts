@@ -7,12 +7,13 @@ export function generateAlbumCode(title: string, date: Date) {
         .slice(0, 2)
         .join('');
 
-    // 2. Format  date (MMYY)
+    // 2. Format  date (DDMMYY)
+    const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear().toString().slice(-2);
 
     // 3. Gera um sufixo aleatório de 2 caracteres (estilo serial number)
     const random = Math.random().toString(36).substring(2, 4).toUpperCase();
 
-    return `${initials}${month}${year}-${random}`;
+    return `${initials}${day}${month}${year}-${random}`;
 }

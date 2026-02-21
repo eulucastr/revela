@@ -1,150 +1,115 @@
- .album-card {
-        flex: 0 0 50px; // Collapsed width
+.album-card {
+    flex: 0 0 60px; // Deeper collapsed width for the vertical code
+    height: 450px;
+    cursor: pointer;
+    border-right: 1px dashed #ccc;
+    position: relative;
+    overflow: hidden;
+    background-color: #f7f7f7;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+
+    &:last-child {
+        border-right: none;
+    }
+
+    &:hover {
+        // Framer Motion will handle flex expansion and background/border changes
+        z-index: 10;
+    }
+
+    .collapsed-header {
+        width: 100%;
         height: 100%;
-        cursor: pointer;
-        transition: flex 0.4s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s;
-        border-right: 1px dashed #ccc;
-        position: relative;
-        overflow: hidden;
-        background-color: #f7f7f7;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 2;
 
-        &:last-child {
-            border-right: none;
-        }
-
-        &:hover {
-            flex: 1; // Expand to fill space
-            background-color: #d1d1d1; // Grey background from reference
-            border: 2px solid #3498db; // Blue border from reference
-            z-index: 10;
-
-            .collapsed-header {
-                opacity: 0;
-            }
-
-            .expanded-content {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .collapsed-header {
-            width: 100%;
-            height: 100%;
+        .vertical-text {
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
-            transition: opacity 0.2s;
-            pointer-events: none;
-            position: relative;
-
-            .vertical-text {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-
-                .name {
-                    writing-mode: vertical-lr;
-                    text-orientation: mixed;
-                    font-size: 1.2rem;
-                    font-weight: 500;
-                    color: #333;
-                    // line-height: 0.4px;
-                }
-
-                .date {
-                    writing-mode: vertical-lr;
-                    text-orientation: mixed;
-                }
-                // position:absolute;
-                // transform: rotate(-90deg);
-                // transform-origin: center;
-            }
-            // .vertical-text {
-            //     transform: rotate(-90deg) translateY(100%);
-            //     transform-origin: left;
-            //     white-space: nowrap;
-            //     font-family: 'Inter', sans-serif;
-            //     text-transform: uppercase;
-            //     letter-spacing: 0.1em;
-            //     font-size: 1rem;
-            //     color: #333;
-            //     width: 100%; // Enough to hold the text
-            //     display: flex;
-            //     gap: 1rem;
-            //     display: flex;
-            //     justify-content: space-between;
-            
-            //     .date {
-            //         opacity: 0.6;
-            //         font-weight: 300;
-            //     }
-
-            //     .name {
-            //         font-weight: 500;
-            //         max-width: 270px;
-            //         white-space: nowrap;
-            //         overflow: hidden;
-            //         text-overflow: ellipsis;
-            //     }
-            // }
-        }
-
-        .expanded-content {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
+            gap: 1rem;
             align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
-            padding: 2rem;
-            box-sizing: border-box;
 
-            .album-preview {
-                width: 60%;
-                max-width: 300px;
-                aspect-ratio: 1;
+            .code {
+                writing-mode: vertical-lr;
+                text-orientation: mixed;
+                font-size: 1.4rem;
+                font-weight: 600;
+                color: #333;
+                letter-spacing: 3px;
+                font-family: monospace;
+                transform: rotate(180deg);
                 margin-bottom: 2rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: #fff;
-                padding: 10px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-
-                img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-
-                .preview-placeholder {
-                    font-size: 4rem;
-                }
             }
 
-            .album-info {
-                text-align: center;
-
-                .album-name {
-                    font-size: 1.5rem;
-                    font-weight: 400;
-                    font-style: italic; // Reference shows italics
-                    text-transform: uppercase;
-                    letter-spacing: 0.15em;
-                    color: #000;
-                    margin: 0;
-                }
-
-                .album-date {
-                    font-size: 1.2rem;
-                    color: #333;
-                    margin-top: 0.5rem;
-                    font-weight: 300;
-                }
+            .date {
+                writing-mode: vertical-lr;
+                text-orientation: mixed;
             }
         }
     }
+
+    .expanded-content {
+        height: 100%;
+        width: 320px; // Fixed expansion width
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        box-sizing: border-box;
+        background-color: #d1d1d1;
+        position: relative;
+        z-index: 1;
+
+        .album-preview {
+            width: 100%;
+            aspect-ratio: 1;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            padding: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .preview-placeholder {
+                font-size: 4rem;
+            }
+        }
+
+        .album-info {
+            text-align: center;
+
+            .album-name {
+                font-size: 1.6rem;
+                font-weight: 400;
+                font-style: italic;
+                text-transform: uppercase;
+                letter-spacing: 0.2em;
+                color: #000;
+                margin: 0;
+            }
+
+            .album-date {
+                font-size: 1.1rem;
+                color: #333;
+                margin-top: 0.8rem;
+                font-weight: 300;
+                font-family: monospace;
+            }
+        }
+    }
+}
