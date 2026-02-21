@@ -1,72 +1,72 @@
 # 📸 Revela
 
-> **Reviva suas memórias em álbuns digitais analógicos.**
+> **Relive your memories in analog digital albums.**
 
-Revela é um aplicativo desktop projetado para organizar e exibir suas fotos com uma estética nostálgica e moderna. Fuja das galerias digitais frias e organize suas memórias em álbuns que trazem de volta a sensação de folhear um álbum de fotos real, com a flexibilidade da tecnologia moderna.
+Revela is a desktop application designed to organize and display your photos with a nostalgic yet modern aesthetic. Escape cold digital galleries and organize your memories into albums that bring back the feeling of flipping through a real photo album, with the flexibility of modern technology.
 
-## ✨ Funcionalidades
+## ✨ Features
 
-- **Álbuns Personalizados:** Organize suas fotos em álbuns temáticos.
-- **Interface Minimalista:** Foco total nas suas fotos com um design limpo e elegante.
-- **Interação Fluida:** Animações suaves de hover e transições de layout usando Framer Motion.
-- **Arranjo Livre:** Reorganize suas fotos facilmente com suporte a drag-and-drop.
-- **Estética "Papel":** Visual inspirado em álbuns físicos com texturas e sombras sutis.
+- **Personalized Albums:** Organize your photos into thematic albums.
+- **Minimalist Interface:** Total focus on your photos with a clean and elegant design.
+- **Fluid Interaction:** Smooth hover animations and layout transitions using Framer Motion.
+- **Free Arrangement:** Easily reorganize your photos with drag-and-drop support.
+- **"Paper" Aesthetic:** Visuals inspired by physical albums with subtle textures and shadows.
 
-## 🚀 Tecnologias
+## 🚀 Technologies
 
-Este projeto foi construído utilizando as seguintes tecnologias:
+This project was built using the following technologies:
 
-- **[Electron](https://www.electronjs.org/):** Framework para aplicações desktop cross-platform.
-- **[React](https://reactjs.org/):** Biblioteca para interfaces de usuário.
-- **[TypeScript](https://www.typescriptlang.org/):** Tipagem estática para maior segurança no desenvolvimento.
-- **[Vite](https://vitejs.dev/):** Build tool ultra-rápida.
-- **[SASS/SCSS](https://sass-lang.com/):** Pré-processador CSS para estilos dinâmicos e organizados.
-- **[Framer Motion](https://www.framer.com/motion/):** Biblioteca de animações para React.
-- **[dnd-kit](https://dndkit.com/):** Kit de ferramentas para funcionalidades de arrastar e soltar.
+- **[Electron](https://www.electronjs.org/):** Framework for cross-platform desktop applications.
+- **[React](https://reactjs.org/):** Library for user interfaces.
+- **[TypeScript](https://www.typescriptlang.org/):** Static typing for better development safety.
+- **[Vite](https://vitejs.dev/):** Ultra-fast build tool.
+- **[SASS/SCSS](https://sass-lang.com/):** CSS preprocessor for dynamic and organized styles.
+- **[Framer Motion](https://www.framer.com/motion/):** Animation library for React.
+- **[dnd-kit](https://dndkit.com/):** Toolkit for drag-and-drop functionality.
 
-## 🛠️ Começando
+## 🛠️ Getting Started
 
-Siga as instruções abaixo para rodar o projeto localmente.
+Follow the instructions below to run the project locally.
 
-### Pré-requisitos
+### Prerequisites
 
-- [Node.js](https://nodejs.org/) (versão LTS recomendada)
-- npm (geralmente vem com o Node.js)
+- [Node.js](https://nodejs.org/) (LTS version recommended)
+- npm (usually comes with Node.js)
 
-### Instalação
+### Installation
 
-1. Clone o repositório:
+1. Clone the repository:
    ```bash
-   git clone https://github.com/seu-usuario/revela.git
+   git clone https://github.com/eulucastr/revela.git
    ```
-2. Instale as dependências:
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-### Execução
+### Running
 
-Para iniciar o aplicativo em modo de desenvolvimento:
+To start the application in development mode:
 ```bash
 npm start
 ```
 
-## 📦 Scripts Disponíveis
+## 📦 Available Scripts
 
-- `npm start`: Inicia o aplicativo Electron usando o Electron Forge.
-- `npm run lint`: Executa o ESLint para verificar erros de estilo no código.
-- `npm run test`: Executa os testes unitários usando Jest.
-- `npm run package`: Empacota o aplicativo para distribuição.
-- `npm run make`: Gera os instaladores do aplicativo.
+- `npm start`: Starts the Electron application using Electron Forge.
+- `npm run lint`: Runs ESLint to check for code style errors.
+- `npm run test`: Runs unit tests using Jest.
+- `npm run package`: Packages the application for distribution.
+- `npm run make`: Generates application installers.
 
-## 📂 Estrutura do Projeto
+## 📂 Project Structure
 
-- `src/main.ts`: Ponto de entrada do processo principal do Electron.
-- `src/renderer.tsx`: Ponto de entrada do processo de renderização (React).
-- `src/components`: Componentes React reutilizáveis.
-- `src/styles`: Arquivos SCSS para estilização global e de componentes.
-- `src/assets`: Recursos estáticos como ícones e texturas.
+- `src/main.ts`: Entry point for the Electron main process.
+- `src/renderer.tsx`: Entry point for the renderer process (React).
+- `src/components`: Reusable React components.
+- `src/styles`: SCSS files for global and component styling.
+- `src/assets`: Static resources like icons and textures.
 
 ---
 
-Desenvolvido com ❤️ por [Lucas Torres](https://github.com/lucas-torres-dev)
+Developed with ❤️ by [Lucas Torres](https://github.com/lucas-torres-dev)
