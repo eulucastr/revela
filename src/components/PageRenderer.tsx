@@ -18,8 +18,8 @@ const PageRenderer: React.FC<PageRendererProps> = ({ photos, template, pageIndex
             {photosOnThisPage.map((photo, i) => (
                 <PhotoFrame
                     key={photo}
+                    id={`photo-${i}`}
                     src={`${albumPath}/${photo}`}
-                    rotation={i % 2 === 0 ? -1 : 1.5}
                 />
             ))}
         </div>

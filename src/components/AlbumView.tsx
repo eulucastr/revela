@@ -16,15 +16,14 @@ import {
 } from '@dnd-kit/sortable';
 import PhotoFrame from './PhotoFrame';
 import '../styles/components/AlbumView.scss';
+import { useAlbum } from '../context/AlbumContext';
 
-interface AlbumViewProps {
-    albumPath: string;
-    onBack: () => void;
-}
-
-const AlbumView: React.FC<AlbumViewProps> = ({ albumPath, onBack }) => {
+const AlbumView: React.FC = () => {
+    const { libraryRoot, currentAlbum, closeAlbum } = useAlbum();
     const [photos, setPhotos] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const albumPath = `${libraryRoot}/${currentAlbum}`;
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -38,6 +37,7 @@ const AlbumView: React.FC<AlbumViewProps> = ({ albumPath, onBack }) => {
     );
 
     const loadAlbum = async () => {
+        if (!libraryRoot || !currentAlbum) return;
         setLoading(true);
         // We get the meta first to respect the saved order
         const albumMeta = await window.electronAPI.getAlbumMeta(albumPath);
@@ -87,14 +87,12 @@ const AlbumView: React.FC<AlbumViewProps> = ({ albumPath, onBack }) => {
 
     if (loading) return <div className="album-view-loading">Carregando álbum...</div>;
 
-    const albumName = albumPath.split(/[\\/]/).pop();
-
     return (
         <div className="album-view">
             <header className="album-header">
                 <div className="header-left">
-                    <button onClick={onBack} className="back-button">← Voltar</button>
-                    <h2>{albumName}</h2>
+                    <button onClick={closeAlbum} className="back-button">← Voltar</button>
+                    <h2>{currentAlbum}</h2>
                 </div>
                 <button className="primary-button small" onClick={handleAddPhotos}>
                     + Adicionar Fotos

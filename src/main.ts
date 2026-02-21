@@ -80,9 +80,19 @@ ipcMain.handle('list-albums', async (event: any, libraryPath: string) => {
           .filter((f: fs.Dirent) => f.isFile() && /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name))
           .map((f: fs.Dirent) => f.name);
 
+        // Read metadata if available
+        let metadata: { date: string | null; code: string | null } = { date: null, code: null };
+        const metaFile = path.join(albumPath, '.meta', 'album.json');
+        if (fs.existsSync(metaFile)) {
+          const content = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
+          metadata.date = content.date || null;
+          metadata.code = content.code || null;
+        }
+
         return {
           name: albumName,
-          preview: photos.length > 0 ? path.join(albumPath, photos[0]) : null
+          preview: photos.length > 0 ? path.join(albumPath, photos[0]) : null,
+          metadata
         };
       });
     return folders;
@@ -92,7 +102,7 @@ ipcMain.handle('list-albums', async (event: any, libraryPath: string) => {
   }
 });
 
-ipcMain.handle('create-album', async (event: any, { libraryPath, name }: { libraryPath: string, name: string }) => {
+ipcMain.handle('create-album', async (event: any, { libraryPath, name, metadata }: { libraryPath: string, name: string, metadata: any }) => {
   try {
     const albumPath = path.join(libraryPath, name);
     const metaPath = path.join(albumPath, '.meta');
@@ -103,7 +113,12 @@ ipcMain.handle('create-album', async (event: any, { libraryPath, name }: { libra
 
     if (!fs.existsSync(metaPath)) {
       fs.mkdirSync(metaPath);
-      fs.writeFileSync(path.join(metaPath, 'album.json'), JSON.stringify({ photos: [], template: 'default' }));
+      fs.writeFileSync(path.join(metaPath, 'album.json'), JSON.stringify({
+        photos: [],
+        template: 'default',
+        date: metadata?.date,
+        code: metadata?.code
+      }, null, 2));
       fs.writeFileSync(path.join(metaPath, 'captions.json'), JSON.stringify({}));
     }
 

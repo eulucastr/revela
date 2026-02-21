@@ -1,18 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Dashboard from './components/Dashboard';
 import AlbumView from './components/AlbumView';
+import { AlbumProvider, useAlbum } from './context/AlbumContext';
 
-const App: React.FC = () => {
-    const [libraryRoot, setLibraryRoot] = useState<string | null>(null);
-    const [currentAlbum, setCurrentAlbum] = useState<string | null>(null);
-
-    useEffect(() => {
-        const initLibrary = async () => {
-            const path = await window.electronAPI.getLibraryPath();
-            setLibraryRoot(path);
-        };
-        initLibrary();
-    }, []);
+const AppContent: React.FC = () => {
+    const { libraryRoot, currentAlbum, closeAlbum } = useAlbum();
 
     if (!libraryRoot) {
         return <div className="loading-screen">Iniciando Revela...</div>;
@@ -20,30 +12,27 @@ const App: React.FC = () => {
 
     if (currentAlbum) {
         const fullPath = `${libraryRoot}/${currentAlbum}`;
-        return (
-            <AlbumView
-                albumPath={fullPath}
-                onBack={() => setCurrentAlbum(null)}
-            />
-        );
+        return <AlbumView />;
     }
 
     return (
         <div className="app-container">
             <header className="app-header">
                 <h1>Revela</h1>
-                <div className="library-info">
-                    <span>{libraryRoot}</span>
-                </div>
             </header>
 
             <main className="dashboard">
-                <Dashboard
-                    libraryPath={libraryRoot}
-                    onOpenAlbum={(name) => setCurrentAlbum(name)}
-                />
+                <Dashboard />
             </main>
         </div>
+    );
+};
+
+const App: React.FC = () => {
+    return (
+        <AlbumProvider>
+            <AppContent />
+        </AlbumProvider>
     );
 };
 

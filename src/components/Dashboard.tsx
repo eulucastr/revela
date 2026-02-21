@@ -1,32 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/components/Dashboard.scss';
+import AlbumCard from './AlbumCard';
+import { useAlbum } from '../context/AlbumContext';
+import { generateAlbumCode } from '../utils/albumCreation';
 
-interface DashboardProps {
-    libraryPath: string;
-    onOpenAlbum: (albumName: string) => void;
-}
-
-const Dashboard: React.FC<DashboardProps> = ({ libraryPath, onOpenAlbum }) => {
-    const [albums, setAlbums] = useState<{ name: string, preview: string | null }[]>([]);
+const Dashboard: React.FC = () => {
+    const { libraryRoot, openAlbum } = useAlbum();
+    const [albums, setAlbums] = useState<{ name: string, preview: string | null, metadata: { date: string, code: string } }[]>([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [newAlbumName, setNewAlbumName] = useState('');
     const [loading, setLoading] = useState(true);
 
     const fetchAlbums = async () => {
+        if (!libraryRoot) return;
         setLoading(true);
-        const list = await window.electronAPI.listAlbums(libraryPath);
+        const list = await window.electronAPI.listAlbums(libraryRoot);
         setAlbums(list);
         setLoading(false);
     };
 
     useEffect(() => {
         fetchAlbums();
-    }, [libraryPath]);
+    }, [libraryRoot]);
 
     const handleCreate = async () => {
-        if (!newAlbumName.trim()) return;
+        if (!newAlbumName.trim() || !libraryRoot) return;
 
-        const success = await window.electronAPI.createAlbum(libraryPath, newAlbumName);
+        const date = new Date();
+        const code = generateAlbumCode(newAlbumName, date);
+        const metadata = {
+            date: date.toLocaleDateString('pt-BR'),
+            code: code
+        };
+
+        const success = await window.electronAPI.createAlbum(libraryRoot, newAlbumName, metadata);
         if (success) {
             setNewAlbumName('');
             setShowCreateModal(false);
@@ -51,17 +58,8 @@ const Dashboard: React.FC<DashboardProps> = ({ libraryPath, onOpenAlbum }) => {
                 </div>
             ) : (
                 <div className="album-grid">
-                    {albums.map(album => (
-                        <div key={album.name} className="album-card" onClick={() => onOpenAlbum(album.name)}>
-                            <div className="album-preview">
-                                {album.preview ? (
-                                    <img src={`atom://${album.preview.replace(/\\/g, '/')}`} alt={album.name} />
-                                ) : (
-                                    <div className="preview-placeholder">🖼️</div>
-                                )}
-                            </div>
-                            <span className="album-name">{album.name}</span>
-                        </div>
+                    {albums.map((album, index) => (
+                        <AlbumCard key={index} album={album} onOpenAlbum={openAlbum} />
                     ))}
                 </div>
             )}

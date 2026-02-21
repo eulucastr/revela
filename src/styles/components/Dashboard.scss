@@ -24,52 +24,12 @@
 }
 
 .album-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 2rem;
-
-    .album-card {
-        cursor: pointer;
-        transition: transform 0.2s;
-
-        &:hover {
-            transform: translateY(-4px);
-
-            .album-preview {
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            }
-        }
-
-        .album-preview {
-            aspect-ratio: 1;
-            background-color: #f0f0f0;
-            border-radius: 4px;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            border: 1px solid #eee;
-            transition: box-shadow 0.2s;
-            overflow: hidden;
-
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-            .preview-placeholder {
-                opacity: 0.5;
-            }
-        }
-
-        .album-name {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: #333;
-        }
-    }
+    display: flex;
+    gap: 2px; // Very tight gap like the reference
+    height: 400px;
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
 }
 
 .modal-overlay {
