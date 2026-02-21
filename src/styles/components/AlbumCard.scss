@@ -1,22 +1,58 @@
 .album-card {
-    flex: 0 0 60px; // Deeper collapsed width for the vertical code
+    flex: 0 0 60px;
     height: 450px;
     cursor: pointer;
-    border-right: 1px dashed #ccc;
+    border-right: 1px dashed var(--border-color);
     position: relative;
     overflow: hidden;
-    background-color: #f7f7f7;
-    border: 1px solid #e0e0e0;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
+    transition: background-color 0.3s, border-color 0.3s;
+    max-width: 240px;
 
     &:last-child {
         border-right: none;
     }
 
     &:hover {
-        // Framer Motion will handle flex expansion and background/border changes
         z-index: 10;
     }
+
+    .flag {
+            width: 100%;
+            height: min-content;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            pointer-events: none;
+            z-index: 2;
+            margin-bottom: 15px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+
+            .line {
+                width: 100%;
+                height: 5px;
+            }
+
+            .line:nth-child(1) {
+                background-color: var(--sunset-orange);
+            }
+
+            .line:nth-child(2) {
+                background-color: var(--tomato-red);
+            }
+
+            .line:nth-child(3) {
+                background-color: var(--dark-magenta);
+            }
+
+            .line:nth-child(4) {
+                background-color: var(--eggplant-purple);
+            }
+        }
 
     .collapsed-header {
         width: 100%;
@@ -29,7 +65,9 @@
         left: 0;
         pointer-events: none;
         z-index: 2;
-
+        padding-bottom: 40px;
+        box-sizing: border-box;
+        
         .vertical-text {
             display: flex;
             flex-direction: column;
@@ -41,30 +79,38 @@
                 text-orientation: mixed;
                 font-size: 1.4rem;
                 font-weight: 600;
-                color: #333;
+                color: var(--text-primary);
                 letter-spacing: 3px;
                 font-family: monospace;
                 transform: rotate(180deg);
-                margin-bottom: 2rem;
+                margin-bottom: 1rem;
+                font-family: 'Chivo Mono', monospace;
+                font-weight: 500;
+                font-size: 30px;
+                letter-spacing: 10%;
+                color: var(--text-primary);
             }
 
             .date {
                 writing-mode: vertical-lr;
                 text-orientation: mixed;
+                color: var(--text-secondary);
             }
         }
     }
 
     .expanded-content {
         height: 100%;
-        width: 320px; // Fixed expansion width
+        width: 240px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 2rem;
+        // padding: 2rem;
+        
+        padding-bottom: 40px;
         box-sizing: border-box;
-        background-color: #d1d1d1;
+        // background-color: var(--bg-color);
         position: relative;
         z-index: 1;
 
@@ -75,9 +121,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #fff;
+            background-color: var(--card-bg);
             padding: 10px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 25px var(--card-shadow);
 
             img {
                 width: 100%;
@@ -92,23 +138,28 @@
 
         .album-info {
             text-align: center;
+            font-family: 'Bebas Neue', sans-serif;
+                // font-family: 'Chivo Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
 
             .album-name {
                 font-size: 1.6rem;
-                font-weight: 400;
-                font-style: italic;
+                font-weight: 500;
                 text-transform: uppercase;
-                letter-spacing: 0.2em;
-                color: #000;
+                letter-spacing: 0.1em;
+                color: var(--text-primary);
                 margin: 0;
+            
             }
 
             .album-date {
-                font-size: 1.1rem;
-                color: #333;
-                margin-top: 0.8rem;
-                font-weight: 300;
-                font-family: monospace;
+                font-size: 1.4rem;
+                color: var(--text-primary);
+                font-weight: 500;
+                margin: 0;
             }
         }
     }

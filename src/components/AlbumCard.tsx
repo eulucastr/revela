@@ -18,7 +18,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ album, onOpenAlbum }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     // Real metadata or fallbacks
-    const displayDate = album.metadata?.date || "01/01/2026";
+    const displayDate = album.metadata?.date ? album.metadata.date.split(',')[0] : "01/01/2026";
     const displayCode = album.metadata?.code || "ALBUM";
 
     return (
@@ -30,34 +30,37 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ album, onOpenAlbum }) => {
             layout
             initial={false}
             animate={{
-                flex: isHovered ? "0 0 320px" : "0 0 60px",
-                backgroundColor: isHovered ? "#d1d1d1" : "#f7f7f7",
-                borderColor: isHovered ? "#3498db" : "#e0e0e0",
-                boxShadow: isHovered ? "0 10px 30px rgba(0,0,0,0.15)" : "0 2px 5px rgba(0,0,0,0.05)"
+                flex: isHovered ? "0 0 320px" : "0 0 320px",
+                backgroundColor: isHovered ? "var(--card-hover-bg)" : "var(--card-bg)",
+                borderColor: isHovered ? "var(--card-hover-border)" : "var(--border-color)",
+                boxShadow: isHovered ? "0 10px 30px var(--card-shadow)" : "0 2px 5px var(--card-shadow)"
             }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
+
             <AnimatePresence mode="wait">
-                {!isHovered ? (
+                {isHovered ? (
                     <motion.div
                         key="collapsed"
                         className="collapsed-header"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        initial={{ x: "50%" }}
+                        animate={{ x: "0%" }}
+                        exit={{ x: "50%", opacity: 0 }}
                         transition={{ duration: 0.2 }}
                     >
                         <div className="vertical-text">
                             <span className="code">{displayCode}</span>
                         </div>
+
+
                     </motion.div>
                 ) : (
                     <motion.div
                         key="expanded"
                         className="expanded-content"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
+                        initial={{ x: "-100%" }}
+                        animate={{ x: "0%" }}
+                        exit={{ x: "-100%", opacity: 0 }}
                         transition={{ duration: 0.3, delay: 0.1 }}
                     >
                         <div className="album-preview">
@@ -69,11 +72,18 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ album, onOpenAlbum }) => {
                         </div>
                         <div className="album-info">
                             <h3 className="album-name">{album.name}</h3>
-                            <p className="album-date">{displayDate} — {displayCode}</p>
+                            <p className="album-date">{displayDate}</p>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            <div className='flag'>
+                <span className='line'></span>
+                <span className='line'></span>
+                <span className='line'></span>
+                <span className='line'></span>
+            </div>
         </motion.div>
     );
 };

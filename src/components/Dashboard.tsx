@@ -12,11 +12,32 @@ const Dashboard: React.FC = () => {
     const [newAlbumName, setNewAlbumName] = useState('');
     const [loading, setLoading] = useState(true);
 
+    const parseDate = (dateStr: string) => {
+        // Suporta formatos: "DD/MM/YYYY" ou "DD/MM/YYYY, HH:mm"
+        const [datePart, timePart] = dateStr.split(', ');
+        const [day, month, year] = datePart.split('/').map(Number);
+
+        if (timePart) {
+            const [hours, minutes] = timePart.split(':').map(Number);
+            return new Date(year, month - 1, day, hours, minutes);
+        }
+
+        return new Date(year, month - 1, day);
+    };
+
     const fetchAlbums = async () => {
         if (!libraryRoot) return;
         setLoading(true);
         const list = await window.electronAPI.listAlbums(libraryRoot);
-        setAlbums(list);
+
+        // Ordenar por data decrescente
+        const sortedList = [...list].sort((a, b) => {
+            const dateA = a.metadata?.date ? parseDate(a.metadata.date) : new Date(0);
+            const dateB = b.metadata?.date ? parseDate(b.metadata.date) : new Date(0);
+            return dateB.getTime() - dateA.getTime();
+        });
+
+        setAlbums(sortedList);
         setLoading(false);
     };
 
@@ -30,7 +51,13 @@ const Dashboard: React.FC = () => {
         const date = new Date();
         const code = generateAlbumCode(newAlbumName, date);
         const metadata = {
-            date: date.toLocaleDateString('pt-BR'),
+            date: date.toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }),
             code: code
         };
 

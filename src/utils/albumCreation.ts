@@ -1,11 +1,21 @@
 export function generateAlbumCode(title: string, date: Date) {
-    // 1. Pega as iniciais (ex: "Viagem Férias" -> "VF")
-    const initials = title
-        .split(' ')
-        .filter(word => word.length > 0)
-        .map(word => word[0].toUpperCase())
-        .slice(0, 2)
-        .join('');
+    // 1. Gera as letras iniciais baseadas no título
+    const words = title.trim().split(/\s+/).filter(w => w.length > 0);
+    const longWords = words.filter(w => w.length > 3);
+
+    let prefix = '';
+    if (longWords.length >= 2) {
+        prefix = (longWords[0][0] + longWords[1][0]).toUpperCase();
+    } else if (longWords.length === 1) {
+        prefix = longWords[0].substring(0, 2).toUpperCase();
+    } else if (words.length > 0) {
+        // Fallback para palavras curtas se não houver longas
+        prefix = words[0].substring(0, 2).toUpperCase().padEnd(2, 'X');
+    } else {
+        // Duas letras aleatórias se não houver palavras
+        prefix = Math.random().toString(36).substring(2, 4).toUpperCase();
+    }
+
 
     // 2. Format  date (DDMMYY)
     const day = String(date.getDate()).padStart(2, '0');
@@ -15,5 +25,5 @@ export function generateAlbumCode(title: string, date: Date) {
     // 3. Gera um sufixo aleatório de 2 caracteres (estilo serial number)
     const random = Math.random().toString(36).substring(2, 4).toUpperCase();
 
-    return `${initials}${day}${month}${year}-${random}`;
+    return `${prefix}${day}${month}${year}-${random}`;
 }
