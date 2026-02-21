@@ -178,6 +178,23 @@ ipcMain.handle('get-album-meta', async (event: any, albumPath: string) => {
   }
 });
 
+ipcMain.handle('update-album-meta', async (event: any, { albumPath, meta }: { albumPath: string, meta: any }) => {
+  try {
+    const metaPath = path.join(albumPath, '.meta', 'album.json');
+    const metaDir = path.dirname(metaPath);
+
+    if (!fs.existsSync(metaDir)) {
+      fs.mkdirSync(metaDir, { recursive: true });
+    }
+
+    fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2));
+    return true;
+  } catch (error) {
+    console.error('Failed to update album meta:', error);
+    return false;
+  }
+});
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

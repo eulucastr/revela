@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import PageRenderer from './PageRenderer';
+import {
+    DndContext,
+    closestCenter,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    DragEndEvent
+} from '@dnd-kit/core';
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    rectSortingStrategy,
+} from '@dnd-kit/sortable';
+import PhotoFrame from './PhotoFrame';
 import '../styles/components/AlbumView.scss';
 
 interface AlbumViewProps {
@@ -9,16 +24,33 @@ interface AlbumViewProps {
 
 const AlbumView: React.FC<AlbumViewProps> = ({ albumPath, onBack }) => {
     const [photos, setPhotos] = useState<string[]>([]);
-    const [meta, setMeta] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(0);
+
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 5,
+            },
+        }),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
 
     const loadAlbum = async () => {
         setLoading(true);
-        const photoList = await window.electronAPI.listPhotos(albumPath);
+        // We get the meta first to respect the saved order
         const albumMeta = await window.electronAPI.getAlbumMeta(albumPath);
-        setPhotos(photoList);
-        setMeta(albumMeta);
+        const actualPhotos = await window.electronAPI.listPhotos(albumPath);
+
+        // Merge meta photos with actual photos on disk (in case some were added manually)
+        const savedOrder = albumMeta.photos || [];
+        const orderedPhotos = [
+            ...savedOrder.filter((p: string) => actualPhotos.includes(p)),
+            ...actualPhotos.filter((p: string) => !savedOrder.includes(p))
+        ];
+
+        setPhotos(orderedPhotos);
         setLoading(false);
     };
 
@@ -33,10 +65,29 @@ const AlbumView: React.FC<AlbumViewProps> = ({ albumPath, onBack }) => {
         }
     };
 
+    const handleDragEnd = async (event: DragEndEvent) => {
+        const { active, over } = event;
+
+        if (over && active.id !== over.id) {
+            setPhotos((items) => {
+                const oldIndex = items.indexOf(active.id as string);
+                const newIndex = items.indexOf(over.id as string);
+                const newOrder = arrayMove(items, oldIndex, newIndex);
+
+                // Persist the new order
+                window.electronAPI.updateAlbumMeta(albumPath, {
+                    photos: newOrder,
+                    template: 'default'
+                });
+
+                return newOrder;
+            });
+        }
+    };
+
     if (loading) return <div className="album-view-loading">Carregando álbum...</div>;
 
     const albumName = albumPath.split(/[\\/]/).pop();
-    const template = meta?.template || 'default';
 
     return (
         <div className="album-view">
@@ -50,38 +101,28 @@ const AlbumView: React.FC<AlbumViewProps> = ({ albumPath, onBack }) => {
                 </button>
             </header>
 
-            <div className="book-container">
-                <div className="page left-page">
-                    <PageRenderer
-                        photos={photos}
-                        template={template}
-                        pageIndex={currentPage * 2}
-                        albumPath={albumPath}
-                    />
-                    <p className="page-number">{currentPage * 2 + 1}</p>
-                </div>
-
-                <div className="page right-page">
-                    <PageRenderer
-                        photos={photos}
-                        template={template}
-                        pageIndex={(currentPage * 2) + 1}
-                        albumPath={albumPath}
-                    />
-                    <p className="page-number">{currentPage * 2 + 2}</p>
-                </div>
-            </div>
-
-            <footer className="album-controls">
-                <button
-                    disabled={currentPage === 0}
-                    onClick={() => setCurrentPage(p => p - 1)}
-                >Anterior</button>
-                <span>Página {currentPage + 1}</span>
-                <button
-                    onClick={() => setCurrentPage(p => p + 1)}
-                >Próxima</button>
-            </footer>
+            <main className="grid-container">
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                >
+                    <SortableContext
+                        items={photos}
+                        strategy={rectSortingStrategy}
+                    >
+                        <div className="photo-grid">
+                            {photos.map((photo) => (
+                                <PhotoFrame
+                                    key={photo}
+                                    id={photo}
+                                    src={`${albumPath}/${photo}`}
+                                />
+                            ))}
+                        </div>
+                    </SortableContext>
+                </DndContext>
+            </main>
         </div>
     );
 };

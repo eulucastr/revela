@@ -7,4 +7,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
     addPhotos: (albumPath: string) => ipcRenderer.invoke('add-photos', albumPath),
     listPhotos: (albumPath: string) => ipcRenderer.invoke('list-photos', albumPath),
     getAlbumMeta: (albumPath: string) => ipcRenderer.invoke('get-album-meta', albumPath),
+    updateAlbumMeta: (albumPath: string, meta: any) => ipcRenderer.invoke('update-album-meta', { albumPath, meta }),
 });

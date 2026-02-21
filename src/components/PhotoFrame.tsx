@@ -1,24 +1,42 @@
 import React from 'react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import '../styles/components/PhotoFrame.scss';
 
 interface PhotoFrameProps {
+    id: string;
     src: string;
     caption?: string;
-    rotation?: number;
 }
 
-const PhotoFrame: React.FC<PhotoFrameProps> = ({ src, caption, rotation = 0 }) => {
+const PhotoFrame: React.FC<PhotoFrameProps> = ({ id, src, caption }) => {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id });
+
+    const style: React.CSSProperties = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        zIndex: isDragging ? 100 : 1,
+        opacity: isDragging ? 0.6 : 1,
+    };
+
     const safeSrc = src ? `atom://${src.replace(/\\/g, '/')}` : '';
 
     return (
-        <div className="photo-frame-container" style={{ transform: `rotate(${rotation}deg)` }}>
-            <div className="photo-corners">
-                <div className="corner top-left"></div>
-                <div className="corner top-right"></div>
-                <div className="corner bottom-left"></div>
-                <div className="corner bottom-right"></div>
-            </div>
-            <div className="photo-paper">
+        <div
+            ref={setNodeRef}
+            style={style}
+            className={`photo-frame ${isDragging ? 'dragging' : ''}`}
+            {...attributes}
+            {...listeners}
+        >
+            <div className="photo-container">
                 <img src={safeSrc} alt={caption || "Photo"} />
                 {caption && <p className="photo-caption">{caption}</p>}
             </div>

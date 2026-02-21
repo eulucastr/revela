@@ -1,71 +1,52 @@
-.photo-frame-container {
+.photo-frame {
     position: relative;
-    padding: 1.5rem;
-    display: inline-block;
-    transition: transform 0.3s ease;
+    cursor: grab;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    touch-action: none;
+    user-select: none;
 
-    .photo-paper {
+    &:active {
+        cursor: grabbing;
+    }
+
+    &:hover:not(.dragging) {
+        transform: scale(1.02);
+        z-index: 5;
+    }
+
+    &.dragging {
+        cursor: grabbing;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .photo-container {
         background: #fff;
-        padding: 0.6rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border: 1px solid #eee;
+        padding: 4px;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
 
         img {
-            max-width: 100%;
-            height: auto;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 2px;
             display: block;
             -webkit-user-drag: none;
         }
 
         .photo-caption {
-            margin-top: 0.8rem;
+            margin-top: 0.5rem;
             font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            color: #555;
+            font-size: 0.75rem;
+            color: #666;
             text-align: center;
-            font-style: italic;
-        }
-    }
-
-    .photo-corners {
-        position: absolute;
-        top: 1.5rem;
-        left: 1.5rem;
-        right: 1.5rem;
-        bottom: 1.5rem;
-        pointer-events: none;
-        z-index: 5;
-
-        .corner {
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            background: linear-gradient(135deg, transparent 50%, #222 50%);
-            opacity: 0.8;
-
-            &.top-left {
-                top: -8px;
-                left: -8px;
-                transform: rotate(0deg);
-            }
-
-            &.top-right {
-                top: -8px;
-                right: -8px;
-                transform: rotate(90deg);
-            }
-
-            &.bottom-left {
-                bottom: -8px;
-                left: -8px;
-                transform: rotate(-90deg);
-            }
-
-            &.bottom-right {
-                bottom: -8px;
-                right: -8px;
-                transform: rotate(180deg);
-            }
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     }
 }

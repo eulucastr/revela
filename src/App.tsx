@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import SetupView from './components/SetupView';
 import Dashboard from './components/Dashboard';
 import AlbumView from './components/AlbumView';
 

@@ -21,7 +21,7 @@
   },
   "include": [
     "src/**/*",
-    "forge.env.d.ts"
+    "forge.env.d.ts",
   ],
   "exclude": [
     "node_modules"

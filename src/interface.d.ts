@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 export { };
 
 declare global {
@@ -14,6 +16,12 @@ declare global {
             addPhotos: (albumPath: string) => Promise<boolean>;
             listPhotos: (albumPath: string) => Promise<string[]>;
             getAlbumMeta: (albumPath: string) => Promise<AlbumMeta>;
+            updateAlbumMeta: (albumPath: string, meta: AlbumMeta) => Promise<boolean>;
         };
     }
+}
+
+declare module "*.webp" {
+    const value: string;
+    export default value;
 }
