@@ -1,13 +1,19 @@
 export { };
 
 declare global {
+    interface AlbumMeta {
+        photos: string[];
+        template: string;
+    }
+
     interface Window {
         electronAPI: {
-            selectLibrary: () => Promise<string | null>;
-            listGalleries: (path: string) => Promise<string[]>;
-            createGallery: (libraryPath: string, name: string) => Promise<boolean>;
-            listPhotos: (galleryPath: string) => Promise<string[]>;
-            getAlbumMeta: (galleryPath: string) => Promise<any>;
+            getLibraryPath: () => Promise<string>;
+            listAlbums: (path: string) => Promise<{ name: string, preview: string | null }[]>;
+            createAlbum: (libraryPath: string, name: string) => Promise<boolean>;
+            addPhotos: (albumPath: string) => Promise<boolean>;
+            listPhotos: (albumPath: string) => Promise<string[]>;
+            getAlbumMeta: (albumPath: string) => Promise<AlbumMeta>;
         };
     }
 }

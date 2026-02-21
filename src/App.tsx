@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import SetupView from './SetupView';
-import Dashboard from './Dashboard';
-import AlbumView from './AlbumView';
+import SetupView from './components/SetupView';
+import Dashboard from './components/Dashboard';
+import AlbumView from './components/AlbumView';
 
 const App: React.FC = () => {
-    const [libraryRoot, setLibraryRoot] = useState<string | null>(
-        localStorage.getItem('revela_library_root')
-    );
+    const [libraryRoot, setLibraryRoot] = useState<string | null>(null);
+    const [currentAlbum, setCurrentAlbum] = useState<string | null>(null);
 
-    const [currentGallery, setCurrentGallery] = useState<string | null>(null);
-
-    const handleSelectLibrary = (path: string) => {
-        localStorage.setItem('revela_library_root', path);
-        setLibraryRoot(path);
-    };
+    useEffect(() => {
+        const initLibrary = async () => {
+            const path = await window.electronAPI.getLibraryPath();
+            setLibraryRoot(path);
+        };
+        initLibrary();
+    }, []);
 
     if (!libraryRoot) {
-        return <SetupView onSelectLibrary={handleSelectLibrary} />;
+        return <div className="loading-screen">Iniciando Revela...</div>;
     }
 
-    if (currentGallery) {
-        const fullPath = `${libraryRoot}/${currentGallery}`;
+    if (currentAlbum) {
+        const fullPath = `${libraryRoot}/${currentAlbum}`;
         return (
             <AlbumView
-                galleryPath={fullPath}
-                onBack={() => setCurrentGallery(null)}
+                albumPath={fullPath}
+                onBack={() => setCurrentAlbum(null)}
             />
         );
     }
@@ -34,19 +34,14 @@ const App: React.FC = () => {
             <header className="app-header">
                 <h1>Revela</h1>
                 <div className="library-info">
-                    <span>Biblioteca: {libraryRoot}</span>
-                    <button onClick={() => {
-                        localStorage.removeItem('revela_library_root');
-                        setLibraryRoot(null);
-                        setCurrentGallery(null); // Added this line
-                    }} className="text-button">Alterar</button>
+                    <span>{libraryRoot}</span>
                 </div>
             </header>
 
             <main className="dashboard">
                 <Dashboard
                     libraryPath={libraryRoot}
-                    onOpenGallery={(name) => setCurrentGallery(name)} // Added this prop
+                    onOpenAlbum={(name) => setCurrentAlbum(name)}
                 />
             </main>
         </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/components/PhotoFrame.scss';
 
 interface PhotoFrameProps {
     src: string;
@@ -7,6 +8,8 @@ interface PhotoFrameProps {
 }
 
 const PhotoFrame: React.FC<PhotoFrameProps> = ({ src, caption, rotation = 0 }) => {
+    const safeSrc = src ? `atom://${src.replace(/\\/g, '/')}` : '';
+
     return (
         <div className="photo-frame-container" style={{ transform: `rotate(${rotation}deg)` }}>
             <div className="photo-corners">
@@ -16,7 +19,7 @@ const PhotoFrame: React.FC<PhotoFrameProps> = ({ src, caption, rotation = 0 }) =
                 <div className="corner bottom-right"></div>
             </div>
             <div className="photo-paper">
-                <img src={`atom://${src}`} alt={caption || "Photo"} />
+                <img src={safeSrc} alt={caption || "Photo"} />
                 {caption && <p className="photo-caption">{caption}</p>}
             </div>
         </div>

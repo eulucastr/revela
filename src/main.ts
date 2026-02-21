@@ -10,11 +10,29 @@ if (started) {
 
 app.whenReady().then(() => {
   protocol.handle('atom', (request) => {
-    const filePath = decodeURIComponent(request.url.slice('atom://'.length));
-    // Check if path is absolute, otherwise handle appropriately
-    return net.fetch('file:///' + filePath);
+    const url = new URL(request.url);
+    // On Windows, the path might start with /C:/..., so we remove the leading slash if needed
+    let filePath = decodeURIComponent(url.pathname);
+
+    if (process.platform === 'win32' && filePath.startsWith('/')) {
+      // Check if it's a drive letter like /C:/
+      if (/^\/[a-zA-Z]:/.test(filePath)) {
+        filePath = filePath.slice(1);
+      }
+    }
+
+    // Convert to a file:// URL for net.fetch
+    try {
+      const fileUrl = pathToFileURL(filePath).toString();
+      return net.fetch(fileUrl);
+    } catch (e) {
+      console.error('Failed to create file URL:', e);
+      return net.fetch('file:///' + filePath.replace(/\\/g, '/'));
+    }
   });
 });
+
+import { pathToFileURL } from 'url';
 
 const createWindow = () => {
   // Create the browser window.
@@ -38,36 +56,49 @@ const createWindow = () => {
 };
 
 // IPC Handlers
-ipcMain.handle('select-library', async () => {
-  const result = await dialog.showOpenDialog({
-    properties: ['openDirectory', 'createDirectory'],
-  });
-  if (result.canceled) {
-    return null;
-  } else {
-    return result.filePaths[0];
+ipcMain.handle('get-library-path', async () => {
+  const picturesPath = app.getPath('pictures');
+  const revelaPath = path.join(picturesPath, 'Revela');
+
+  if (!fs.existsSync(revelaPath)) {
+    fs.mkdirSync(revelaPath, { recursive: true });
   }
+
+  return revelaPath;
 });
 
-ipcMain.handle('list-galleries', async (event: any, libraryPath: string) => {
+ipcMain.handle('list-albums', async (event: any, libraryPath: string) => {
   try {
     const folders = fs.readdirSync(libraryPath, { withFileTypes: true })
       .filter((dirent: fs.Dirent) => dirent.isDirectory() && !dirent.name.startsWith('.'))
-      .map((dirent: fs.Dirent) => dirent.name);
+      .map((dirent: fs.Dirent) => {
+        const albumName = dirent.name;
+        const albumPath = path.join(libraryPath, albumName);
+
+        // Find the first photo for preview
+        const photos = fs.readdirSync(albumPath, { withFileTypes: true })
+          .filter((f: fs.Dirent) => f.isFile() && /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name))
+          .map((f: fs.Dirent) => f.name);
+
+        return {
+          name: albumName,
+          preview: photos.length > 0 ? path.join(albumPath, photos[0]) : null
+        };
+      });
     return folders;
   } catch (error) {
-    console.error('Failed to list galleries:', error);
+    console.error('Failed to list albums:', error);
     return [];
   }
 });
 
-ipcMain.handle('create-gallery', async (event: any, { libraryPath, name }: { libraryPath: string, name: string }) => {
+ipcMain.handle('create-album', async (event: any, { libraryPath, name }: { libraryPath: string, name: string }) => {
   try {
-    const galleryPath = path.join(libraryPath, name);
-    const metaPath = path.join(galleryPath, '.meta');
+    const albumPath = path.join(libraryPath, name);
+    const metaPath = path.join(albumPath, '.meta');
 
-    if (!fs.existsSync(galleryPath)) {
-      fs.mkdirSync(galleryPath);
+    if (!fs.existsSync(albumPath)) {
+      fs.mkdirSync(albumPath);
     }
 
     if (!fs.existsSync(metaPath)) {
@@ -78,14 +109,53 @@ ipcMain.handle('create-gallery', async (event: any, { libraryPath, name }: { lib
 
     return true;
   } catch (error) {
-    console.error('Failed to create gallery:', error);
+    console.error('Failed to create album:', error);
     return false;
   }
 });
 
-ipcMain.handle('list-photos', async (event: any, galleryPath: string) => {
+ipcMain.handle('add-photos', async (event: any, albumPath: string) => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile', 'multiSelections'],
+    filters: [
+      { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'webp'] }
+    ]
+  });
+
+  if (result.canceled) return false;
+
   try {
-    const files = fs.readdirSync(galleryPath, { withFileTypes: true })
+    const metaPath = path.join(albumPath, '.meta', 'album.json');
+    let meta: { photos: string[], template: string } = { photos: [], template: 'default' };
+
+    if (fs.existsSync(metaPath)) {
+      meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+    }
+
+    for (const filePath of result.filePaths) {
+      const fileName = path.basename(filePath);
+      const destPath = path.join(albumPath, fileName);
+
+      // Copy the file to the album directory
+      fs.copyFileSync(filePath, destPath);
+
+      // Add to meta if not already there
+      if (!meta.photos.includes(fileName)) {
+        meta.photos.push(fileName);
+      }
+    }
+
+    fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2));
+    return true;
+  } catch (error) {
+    console.error('Failed to add photos:', error);
+    return false;
+  }
+});
+
+ipcMain.handle('list-photos', async (event: any, albumPath: string) => {
+  try {
+    const files = fs.readdirSync(albumPath, { withFileTypes: true })
       .filter((dirent: fs.Dirent) => dirent.isFile() && /\.(jpg|jpeg|png|webp|gif)$/i.test(dirent.name))
       .map((dirent: fs.Dirent) => dirent.name);
     return files;
@@ -95,9 +165,9 @@ ipcMain.handle('list-photos', async (event: any, galleryPath: string) => {
   }
 });
 
-ipcMain.handle('get-album-meta', async (event: any, galleryPath: string) => {
+ipcMain.handle('get-album-meta', async (event: any, albumPath: string) => {
   try {
-    const metaPath = path.join(galleryPath, '.meta', 'album.json');
+    const metaPath = path.join(albumPath, '.meta', 'album.json');
     if (fs.existsSync(metaPath)) {
       return JSON.parse(fs.readFileSync(metaPath, 'utf8'));
     }

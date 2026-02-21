@@ -1,14 +1,15 @@
 import React from 'react';
 import PhotoFrame from './PhotoFrame';
+import '../styles/components/PageRenderer.scss';
 
 interface PageRendererProps {
     photos: string[];
     template: string;
     pageIndex: number;
-    galleryPath: string;
+    albumPath: string;
 }
 
-const PageRenderer: React.FC<PageRendererProps> = ({ photos, template, pageIndex, galleryPath }) => {
+const PageRenderer: React.FC<PageRendererProps> = ({ photos, template, pageIndex, albumPath }) => {
     // Simple logic for now: 2 photos per page
     const photosOnThisPage = photos.slice(pageIndex * 2, (pageIndex * 2) + 2);
 
@@ -17,7 +18,7 @@ const PageRenderer: React.FC<PageRendererProps> = ({ photos, template, pageIndex
             {photosOnThisPage.map((photo, i) => (
                 <PhotoFrame
                     key={photo}
-                    src={`${galleryPath}/${photo}`}
+                    src={`${albumPath}/${photo}`}
                     rotation={i % 2 === 0 ? -1 : 1.5}
                 />
             ))}
