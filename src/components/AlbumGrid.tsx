@@ -14,22 +14,25 @@ const Dashboard: React.FC = () => {
                     <p>Você ainda não tem álbuns. Crie a sua primeira memória.</p>
                 </div>
             ) : (
-                <div className="albums-grid">
-                    <div className='odd-column column'>
-                        {
-                            albums.filter((_, index) => index % 2 === 0).map(album => (
-                                <AlbumCard key={album.name} album={album} onOpenAlbum={openAlbum} />
-                            ))
-                        }
+                <>
+                    <div className='overlay'></div>
+                    <div className="albums-grid">
+                        <div className='odd-column column'>
+                            {
+                                albums.filter((_, index) => index % 2 === 0).map(album => (
+                                    <AlbumCard key={album.name} album={album} onOpenAlbum={openAlbum} />
+                                ))
+                            }
+                        </div>
+                        <div className='even-column column'>
+                            {
+                                albums.filter((_, index) => index % 2 !== 0).map(album => (
+                                    <AlbumCard key={album.name} album={album} onOpenAlbum={openAlbum} />
+                                ))
+                            }
+                        </div> 
                     </div>
-                    <div className='even-column column'>
-                        {
-                            albums.filter((_, index) => index % 2 !== 0).map(album => (
-                                <AlbumCard key={album.name} album={album} onOpenAlbum={openAlbum} />
-                            ))
-                        }
-                    </div> 
-                </div>
+                </>
             )}
         </div>
     );
