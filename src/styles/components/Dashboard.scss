@@ -30,15 +30,21 @@
     }
 }
 
-.album-grid {
-    display: flex;
-    flex-wrap: wrap;
+.albums-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
     padding: 1.5rem;
     height: auto;
     overflow-y: auto;
     overflow-x: hidden;
     align-content: flex-start;
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
 
     &::-webkit-scrollbar {
         width: 6px;

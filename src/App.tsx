@@ -21,8 +21,12 @@ const AppContent: React.FC = () => {
                         <div className="scrolling-text-item">REVELE·REVELE·REVELE·REVELE·REVELE·REVELE·</div>
                     </div>
                 </div>
+                
 
-                {/* <div className="header-actions">
+                <div className="header-actions">
+                    <button className='btn-primary'>
+                        <span className="icon">📁</span>
+                    </button>
                     <button
                         className="theme-toggle"
                         onClick={toggleTheme}
@@ -30,7 +34,7 @@ const AppContent: React.FC = () => {
                     >
                         {theme === 'light' ? '🌙' : '☀️'}
                     </button>
-                </div> */}
+                </div>
             </header>
 
             <main className="dashboard-wrapper">
