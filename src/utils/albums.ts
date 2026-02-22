@@ -1,4 +1,4 @@
-export function generateAlbumCode(title: string, date: Date) {
+export function generateAlbumCode(title: string, date: Date): string {
     // 1. Gera as letras iniciais baseadas no título
     const words = title.trim().split(/\s+/).filter(w => w.length > 0);
     const longWords = words.filter(w => w.length > 3);
@@ -27,3 +27,17 @@ export function generateAlbumCode(title: string, date: Date) {
 
     return `${prefix}${day}${month}${year}-${random}`;
 }
+
+export function parseDate(dateStr: string): Date {
+        // Suporta formatos: "DD/MM/YYYY" ou "DD/MM/YYYY, HH:mm"
+        const [datePart, timePart] = dateStr.split(', ');
+        const [day, month, year] = datePart.split('/').map(Number);
+
+        if (timePart) {
+            const [hours, minutes] = timePart.split(':').map(Number);
+            return new Date(year, month - 1, day, hours, minutes);
+        }
+
+        return new Date(year, month - 1, day);
+    };
+

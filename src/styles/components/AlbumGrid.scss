@@ -1,0 +1,62 @@
+.dashboard {
+    height: 100%;
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 40px;
+    margin: 0 auto;
+    overflow-y: auto;
+    
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+    scroll-margin-top: 80px;
+    /* WebKit-based browsers */
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 10px;
+        margin-top: 80px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 10px;
+        min-height: 24px;
+        transition: background-color 120ms ease, transform 120ms ease;
+        
+        &:hover {
+            // background: var(--border-color-hover);
+            transform: translateZ(0);
+        }
+    }
+
+    /* Provide a subtle inset when hovering over the grid */
+    &:hover &::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.02);
+    }
+}
+
+
+.albums-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    padding-top: 0;
+    height: auto;
+    align-content: flex-start;
+    padding-bottom: 200px;
+    max-height: 100%;
+    margin-top: 80px;
+    
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    } 
+}
+

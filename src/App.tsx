@@ -1,8 +1,11 @@
 import React from 'react';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/AlbumGrid';
 import AlbumView from './components/AlbumView';
+import MainHeader from './components/MainHeader';
+import TextScroll from './components/TextScroll';
 import { AlbumProvider, useAlbum } from './context/AlbumContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
+import Main from 'electron/main';
 
 const AppContent: React.FC = () => {
     const { libraryRoot, currentAlbum } = useAlbum();
@@ -14,17 +17,12 @@ const AppContent: React.FC = () => {
     return (
         <div className="app-container">
             <header className="app-header">
-                <div className="scrolling-text-container">
-                    <div className="scrolling-text-inner">
-                        <div className="scrolling-text-item">REVELE·REVELE·REVELE·REVELE·REVELE·</div>
-                        <div className="scrolling-text-item">REVELE·REVELE·REVELE·REVELE·REVELE·</div>
-                    </div>
-                </div>
+                <TextScroll />
             </header>
 
-            <main className="dashboard-wrapper">
-                {currentAlbum ? <AlbumView /> : <Dashboard />}
-            </main>
+            <MainHeader />
+
+            {currentAlbum ? <AlbumView /> : <Dashboard />}
         </div>
     );
 };

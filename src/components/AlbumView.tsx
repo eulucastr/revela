@@ -77,7 +77,9 @@ const AlbumView: React.FC = () => {
                 // Persist the new order
                 window.electronAPI.updateAlbumMeta(albumPath, {
                     photos: newOrder,
-                    template: 'default'
+                    template: 'default',
+                    date: '',
+                    code: ''
                 });
 
                 return newOrder;

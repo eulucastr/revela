@@ -1,0 +1,51 @@
+.scrolling-text-container {
+  overflow: hidden; 
+  white-space: nowrap; 
+  background-color: var(--content-bg);
+  margin: 20px 0;
+
+  .scrolling-text-inner {
+    display: flex; 
+    justify-content: flex-start;
+    width: max-content; 
+    font-family: var(--text-title);
+    color: var(--text-primary);
+    font-weight: 700;
+    letter-spacing: 0.4rem;
+    font-size: 8rem;
+    user-select: none;
+    animation: scroll-left 35s linear infinite; 
+  }
+
+  // .scrolling-text-item {
+  //   display: inline-block;
+  //   background: linear-gradient(90deg, var(--sunset-orange), var(--tomato-red), var(--dark-magenta), var(--eggplant-purple), var(--sunset-orange), var(--tomato-red), var(--dark-magenta), var(--eggplant-purple));
+  //   background-size: 300% 100%;
+  //   -webkit-background-clip: text;
+  //   background-clip: text;
+  //   -webkit-text-fill-color: transparent;
+  //   color: transparent;
+  //   animation: gradient-move 5s linear infinite;
+  // }
+  
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0); 
+    }
+    100% {
+      transform: translateX(-20%); 
+    }
+  }
+
+  @keyframes gradient-move {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+}
