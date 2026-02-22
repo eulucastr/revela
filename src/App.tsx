@@ -6,7 +6,6 @@ import { ThemeProvider, useTheme } from './context/ThemeContext';
 
 const AppContent: React.FC = () => {
     const { libraryRoot, currentAlbum } = useAlbum();
-    const { theme, toggleTheme } = useTheme();
 
     if (!libraryRoot) {
         return <div className="loading-screen">Iniciando Revela...</div>;
@@ -17,23 +16,9 @@ const AppContent: React.FC = () => {
             <header className="app-header">
                 <div className="scrolling-text-container">
                     <div className="scrolling-text-inner">
-                        <div className="scrolling-text-item">REVELE·REVELE·REVELE·REVELE·REVELE·REVELE·</div>
-                        <div className="scrolling-text-item">REVELE·REVELE·REVELE·REVELE·REVELE·REVELE·</div>
+                        <div className="scrolling-text-item">REVELE·REVELE·REVELE·REVELE·REVELE·</div>
+                        <div className="scrolling-text-item">REVELE·REVELE·REVELE·REVELE·REVELE·</div>
                     </div>
-                </div>
-                
-
-                <div className="header-actions">
-                    <button className='btn-primary'>
-                        <span className="icon">📁</span>
-                    </button>
-                    <button
-                        className="theme-toggle"
-                        onClick={toggleTheme}
-                        title={theme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}
-                    >
-                        {theme === 'light' ? '🌙' : '☀️'}
-                    </button>
                 </div>
             </header>
 

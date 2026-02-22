@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/components/AlbumCard.scss';
 
 interface AlbumCardProps {
@@ -23,7 +23,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ album, onOpenAlbum }) => {
             </div>
 
             <div className="expanded">
-                <p className="album-date">{album.metadata.date}</p>
+                <p className="album-date">{album.metadata.date?.split(',')[0]}</p>
                 <h3 className="album-name">{album.name}</h3>
             </div>
             

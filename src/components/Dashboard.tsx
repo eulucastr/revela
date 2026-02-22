@@ -4,6 +4,7 @@ import AlbumCard from './AlbumCard';
 import { useAlbum } from '../context/AlbumContext';
 import { generateAlbumCode } from '../utils/albumCreation';
 import { motion } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
 
 const Dashboard: React.FC = () => {
     const { libraryRoot, openAlbum } = useAlbum();
@@ -11,6 +12,7 @@ const Dashboard: React.FC = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [newAlbumName, setNewAlbumName] = useState('');
     const [loading, setLoading] = useState(true);
+    const { theme, toggleTheme } = useTheme();
 
     const parseDate = (dateStr: string) => {
         // Suporta formatos: "DD/MM/YYYY" ou "DD/MM/YYYY, HH:mm"
@@ -70,58 +72,67 @@ const Dashboard: React.FC = () => {
     };
 
     return (
-        <div className="dashboard-content">
-            {/* <header className="dashboard-header">
-                <h2>Seus Álbuns</h2>
-                <button className="primary-button small" onClick={() => setShowCreateModal(true)}>
-                    + Criar Álbum
+        <div className="dashboard">
+            <div className="header-actions">
+                {/* create album onclick */}
+                <button className='btn-primary' onClick={() => setShowCreateModal(true)}>
+                    <span className='text'>Adicionar Álbum</span>
                 </button>
-            </header> */}
+                <button
+                    className="theme-toggle btn-primary"
+                    onClick={toggleTheme}
+                    title={theme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}
+                >
+                    {theme === 'light' ? '🌙' : '☀️'}
+                </button>
+            </div>
 
-            {loading ? (
-                <p>Carregando álbuns...</p>
-            ) : albums.length === 0 ? (
-                <div className="empty-state">
-                    <p>Você ainda não tem álbuns. Crie a sua primeira memória.</p>
-                </div>
-            ) : (
-                <div className="albums-grid">
-                    <div className='odd-column column'>
-                        {
-                            albums.filter((_, index) => index % 2 === 0).map(album => (
-                                <AlbumCard key={album.name} album={album} onOpenAlbum={openAlbum} />
-                            ))
-                        }
+            <div className='dashboard-content'>
+                {loading ? (
+                    <p>Carregando álbuns...</p>
+                ) : albums.length === 0 ? (
+                    <div className="empty-state">
+                        <p>Você ainda não tem álbuns. Crie a sua primeira memória.</p>
                     </div>
-                    <div className='even-column column'>
-                        {
-                            albums.filter((_, index) => index % 2 !== 0).map(album => (
-                                <AlbumCard key={album.name} album={album} onOpenAlbum={openAlbum} />
-                            ))
-                        }
-                    </div> 
-                </div>
-            )}
+                ) : (
+                    <div className="albums-grid">
+                        <div className='odd-column column'>
+                            {
+                                albums.filter((_, index) => index % 2 === 0).map(album => (
+                                    <AlbumCard key={album.name} album={album} onOpenAlbum={openAlbum} />
+                                ))
+                            }
+                        </div>
+                        <div className='even-column column'>
+                            {
+                                albums.filter((_, index) => index % 2 !== 0).map(album => (
+                                    <AlbumCard key={album.name} album={album} onOpenAlbum={openAlbum} />
+                                ))
+                            }
+                        </div> 
+                    </div>
+                )}
 
-            {showCreateModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h3>Novo Álbum</h3>
-                        <p>Dê um nome para seu novo álbum de memórias.</p>
-                        <input
-                            type="text"
-                            value={newAlbumName}
-                            onChange={(e) => setNewAlbumName(e.target.value)}
-                            placeholder="Ex: Viagem 2024"
-                            autoFocus
-                        />
-                        <div className="modal-actions">
-                            <button onClick={() => setShowCreateModal(false)}>Cancelar</button>
-                            <button className="primary-button" onClick={handleCreate}>Criar</button>
+                {showCreateModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h3>Novo Álbum</h3>
+                            <p>Dê um nome para seu novo álbum de memórias.</p>
+                            <input
+                                type="text"
+                                value={newAlbumName}
+                                onChange={(e) => setNewAlbumName(e.target.value)}
+                                placeholder="Ex: Viagem 2024"
+                                autoFocus
+                            />
+                            <div className="modal-actions">
+                                <button onClick={() => setShowCreateModal(false)}>Cancelar</button>
+                                <button className="primary-button" onClick={handleCreate}>Criar</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 };

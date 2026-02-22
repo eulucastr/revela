@@ -9,8 +9,8 @@
     --text-secondary: #{$text-secondary-light};
     --border-color: #{$border-color-light};
     --accent-color: #{$sunset-orange};
-    --button-bg: #{$text-primary-light};
-    --button-text: #{$white};
+    --button-bg: #{$aged-cream-light};
+    --button-text: #{$carbon-black};
     --card-bg: #{rgba($aged-cream, 0.5)};
     --card-hover-bg: #{rgba($aged-cream, 0.5)};
     --card-hover-border: #{$sunset-orange};
@@ -28,16 +28,17 @@
 }
 
 [data-theme='dark'] {
-    --bg-color: #{$shadow-depth};
+    --bg-color: #{$carbon-black};
     --content-bg: #{$carbon-black};
-    --header-bg: #{$shadow-depth};
+    --header-bg: #{$carbon-black};
     --text-primary: #{$text-primary-dark};
     --text-secondary: #{$text-secondary-dark};
     --border-color: #{$border-color-dark};
     --accent-color: #{$sunset-orange};
-    --button-bg: #{$aged-cream};
-    --button-text: #{$carbon-black};
+    --button-bg: #{$carbon-black};
+    --button-text: #{$aged-cream-light};
     --card-hover-bg: #{$carbon-black};
     --card-hover-border: #{$sunset-orange};
     --paper-texture-opacity: 0.02;
+    --accent-color: #{$sunset-orange};
 }

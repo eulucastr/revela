@@ -15,7 +15,7 @@
     transition: border-color 220ms ease, box-shadow 220ms ease, transform 160ms ease, max-height 320ms ease;
 
     &:hover {
-        border-color: var(--card-hover-border);
+        border-color: var(--accent-color);
         cursor: pointer;
         box-shadow: 0 6px 20px rgba(0,0,0,0.06);
         transform: translateY(-2px);
@@ -32,6 +32,17 @@
         .expanded {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        .flag {
+            >span:nth-child(1) { transition: max-height 700ms ease-in-out 500ms }
+            >span:nth-child(2) { transition: max-height 800ms ease-in-out 350ms; }
+            >span:nth-child(3) { transition: max-height 900ms ease-in-out 200ms; }
+            >span:nth-child(4) { transition: max-height 1000ms ease-in-out 50ms; }
+
+            >span {
+                max-height: 200px;
+            }
         }
     }
 
@@ -91,29 +102,29 @@
             width: 7px;
             height: 100%;
             display: inline-block;
-            transition: width 220ms ease, transform 260ms ease;
+            // transition: max-height 220ms ease, transform 260ms ease;
+
+            max-height: 68px;
         }
 
         >span:nth-child(1) {
             background-color: var(--sunset-orange);
+            transition: max-height 300ms ease 0ms;
         }
-
+        
         >span:nth-child(2) {
             background-color: var(--tomato-red);
+            transition: max-height 300ms ease 0ms;
         }
-
+        
         >span:nth-child(3) {
             background-color: var(--dark-magenta);
+            transition: max-height 300ms ease 0ms;
         }
-
+        
         >span:nth-child(4) {
             background-color: var(--eggplant-purple);
-        }
-
-        /* expand the flag bars a little on hover */
-        .album-card:hover & > span,
-        .album-card.hovered & > span {
-            width: 10px;
+            transition: max-height 300ms ease 0ms;
         }
     }
 }

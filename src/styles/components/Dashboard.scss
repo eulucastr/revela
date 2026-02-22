@@ -7,14 +7,23 @@
 
 .dashboard {
     height: 100%;
-    background-color: var(--bg-color);
-    padding: 2rem;
-    overflow-y: auto;
+}
+
+.header-actions {
+    display: flex;
+    gap: 15px;
+    border: 2px solid var(--border-color);
+    border-left: none;
+    border-right: none;
+    padding: 30px 0;
+    width: 100%;
+    justify-content: center;
 }
 
 .dashboard-content {
     max-width: 1200px;
     margin: 0 auto;
+    overflow-y: auto;
 
     .dashboard-header {
         display: flex;
@@ -36,10 +45,11 @@
     gap: 1.5rem;
     padding: 1.5rem;
     height: auto;
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
     align-content: flex-start;
-
+    padding-bottom: 100px;
+    max-height: 100%;
     .column {
         display: flex;
         flex-direction: column;
