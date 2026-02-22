@@ -1,6 +1,5 @@
-@import 'theme';
-@import url('https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Chivo+Mono:ital,wght@0,100..900;1,100..900&display=swap');
+@use 'theme';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
 
 body {
   margin: 0;
@@ -16,38 +15,46 @@ body {
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
   background-color: var(--header-bg);
-  border-bottom: 1px solid var(--border-color);
-  transition: background-color 0.3s, border-color 0.3s;
+  padding: 30px 0;
+}
 
-  h1 {
-    font-size: 1.5rem;
-    margin: 0;
-    font-weight: 400;
+.scrolling-text-container {
+  overflow: hidden; 
+  white-space: nowrap; 
+  background-color: var(--content-bg);
+
+  .scrolling-text-inner {
+    display: flex; 
+    width: max-content; 
+    animation: scroll-left 60s linear infinite; 
+    font-family: var(--text-title);
+    color: var(--text-primary);
+    font-weight: 700;
+    letter-spacing: 0.4rem;
+    font-size: 8rem;
+    pointer-events: none;
+    user-select: none;
   }
-
-  .library-info {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .header-actions {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
+  
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0); 
+    }
+    100% {
+      
+      transform: translateX(-50%); 
+    }
   }
 }
+
 
 .theme-toggle {
   background: none;
@@ -98,3 +105,4 @@ body {
     text-decoration: underline;
   }
 }
+

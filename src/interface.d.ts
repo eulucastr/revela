@@ -6,8 +6,8 @@ declare global {
     interface AlbumMeta {
         photos: string[];
         template: string;
-        date?: string;
-        code?: string;
+        date: string;
+        code: string;
     }
 
     interface Window {

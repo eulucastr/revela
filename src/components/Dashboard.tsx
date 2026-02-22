@@ -71,12 +71,12 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className="dashboard-content">
-            <header className="dashboard-header">
+            {/* <header className="dashboard-header">
                 <h2>Seus Álbuns</h2>
                 <button className="primary-button small" onClick={() => setShowCreateModal(true)}>
                     + Criar Álbum
                 </button>
-            </header>
+            </header> */}
 
             {loading ? (
                 <p>Carregando álbuns...</p>

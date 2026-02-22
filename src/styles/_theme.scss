@@ -1,24 +1,30 @@
-@import 'variables';
-
+@use 'variables' as *;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
 :root {
-    --bg-color: #{$white};
-    --content-bg: #{$white};
-    --header-bg: #{$white};
+    // Colors
+    --bg-color: #{$aged-cream-light};
+    --content-bg: #{$aged-cream-light};
+    --header-bg: #{$aged-cream-light};
     --text-primary: #{$text-primary-light};
     --text-secondary: #{$text-secondary-light};
     --border-color: #{$border-color-light};
     --accent-color: #{$sunset-orange};
     --button-bg: #{$text-primary-light};
     --button-text: #{$white};
-    --card-bg: #{rgba($aged-cream, 0.3)};
-    --card-hover-bg: #{rgba($aged-cream, 0.3)};
+    --card-bg: #{rgba($aged-cream, 0.5)};
+    --card-hover-bg: #{rgba($aged-cream, 0.5)};
     --card-hover-border: #{$sunset-orange};
-    --card-shadow: rgba(0, 0, 0, 0.1);
     --paper-texture-opacity: 0.05;
     --sunset-orange: #{$sunset-orange};
     --tomato-red: #{$tomato-red};
     --dark-magenta: #{$dark-magenta};
     --eggplant-purple: #{$eggplant-purple};
+
+    // Text
+    --text-title: #{$text-title};
+    --text-body: #{$text-body};
+    --text-mono: #{$text-mono};
+    --border-radius: 2px;
 }
 
 [data-theme='dark'] {
@@ -31,9 +37,7 @@
     --accent-color: #{$sunset-orange};
     --button-bg: #{$aged-cream};
     --button-text: #{$carbon-black};
-    --card-bg: #222;
     --card-hover-bg: #{$carbon-black};
     --card-hover-border: #{$sunset-orange};
-    --card-shadow: rgba(0, 0, 0, 0.6);
     --paper-texture-opacity: 0.02;
 }

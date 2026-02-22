@@ -1,5 +1,6 @@
 // Brand Color Palette (Translated from reference)
 $aged-cream: #E5D8C1;
+$aged-cream-light: #F2ECE3;
 $carbon-black: #1A1A1B;
 $sunset-orange: #E68A2E;
 $tomato-red: #C9323D;
@@ -10,7 +11,7 @@ $shadow-depth: #0C0C0C;
 // Utility colors
 $white: #fafafa;
 $light-gray: #f5f5f5;
-$border-color-light: #eee;
+$border-color-light: #333;
 $text-secondary-light: #666;
 $text-primary-light: #333;
 
@@ -18,3 +19,7 @@ $dark-gray: #2d2d2d;
 $border-color-dark: #3a3a3a;
 $text-secondary-dark: #aaa;
 $text-primary-dark: #f5f5f5;
+
+$text-title: 'Noto Serif', serif;
+$text-body: 'Noto Sans', sans-serif;
+$text-mono: 'Noto Sans Mono', monospace;

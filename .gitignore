@@ -93,3 +93,4 @@ out/
 
 # Agent config
 .agent/
+.github
