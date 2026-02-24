@@ -8,6 +8,7 @@
     --text-primary: #{$text-primary-light};
     --text-secondary: #{$text-secondary-light};
     --border-color: #{$border-color-light};
+    --modal-overlay: color-mix(in srgb, #{$carbon-black} 40%, transparent);
     --accent-color: #{$sunset-orange};
     --button-bg: #{$aged-cream-light};
     --button-text: #{$carbon-black};
@@ -19,6 +20,7 @@
     --tomato-red: #{$tomato-red};
     --dark-magenta: #{$dark-magenta};
     --eggplant-purple: #{$eggplant-purple};
+    --scrollbar-thumb: color-mix(in srgb, #{$carbon-black} 7%, transparent);
 
     // Text
     --text-title: #{$text-title};
@@ -41,4 +43,6 @@
     --card-hover-border: #{$sunset-orange};
     --paper-texture-opacity: 0.02;
     --accent-color: #{$sunset-orange};
+    --scrollbar-thumb: #{$border-color-dark};
+    --modal-overlay: color-mix(in srgb, #{$carbon-black} 70%, transparent);
 }

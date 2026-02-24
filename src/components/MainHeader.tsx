@@ -14,6 +14,7 @@ const MainHeader: React.FC = () => {
         if (success) {
             setNewAlbumName('');
             setShowCreateModal(false);
+            
         }
     }
     
@@ -42,12 +43,17 @@ const MainHeader: React.FC = () => {
                             type="text"
                             value={newAlbumName}
                             onChange={(e) => setNewAlbumName(e.target.value)}
+                            onKeyDown={(e) => { if ((e as any).key === 'Enter') handleCreate(); }}
                             placeholder="Ex: Viagem 2024"
                             autoFocus
                         />
                         <div className="modal-actions">
-                            <button onClick={() => setShowCreateModal(false)}>Cancelar</button>
-                            <button className="primary-button" onClick={handleCreate}>Criar</button>
+                            <button className="btn-primary" onClick={() => setShowCreateModal(false)}>
+                                <span>Cancelar</span>
+                            </button>
+                            <button className="btn-primary" onClick={handleCreate}>
+                                <span>Criar</span>
+                            </button>
                         </div>
                     </div>
                 </div>

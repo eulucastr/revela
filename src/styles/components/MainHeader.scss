@@ -15,7 +15,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--modal-overlay);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -23,7 +23,7 @@
 }
 
 .modal-content {
-    background: var(--card-bg);
+    background: var(--bg-color);
     color: var(--text-primary);
     padding: 2rem;
     border-radius: 8px;
@@ -63,28 +63,5 @@
         display: flex;
         justify-content: flex-end;
         gap: 1rem;
-
-        button {
-            background: none;
-            border: none;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-
-            &:hover {
-                background-color: var(--bg-color);
-                border-radius: 4px;
-            }
-
-            &.primary-button {
-                background-color: var(--button-bg);
-                color: var(--button-text);
-
-                &:hover {
-                    filter: brightness(1.1);
-                }
-            }
-        }
     }
 }

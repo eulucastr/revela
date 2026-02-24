@@ -1,12 +1,14 @@
+import React, { useRef, useState } from 'react';
 import '../styles/components/AlbumGrid.scss';
 import AlbumCard from './AlbumCard';
 import { useAlbum } from '../context/AlbumContext';
 
 const Dashboard: React.FC = () => {
     const { libraryRoot, openAlbum, loading, albums } = useAlbum();
+    const scrollTimeoutRef = useRef<number | null>(null);
 
     return (
-        <div className="dashboard">
+        <div className="dashboard" >
             {loading ? (
                 <p>Carregando álbuns...</p>
             ) : albums.length === 0 ? (

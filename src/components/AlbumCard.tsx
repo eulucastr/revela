@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import '../styles/components/AlbumCard.scss';
 
 interface AlbumCardProps {
@@ -15,9 +15,10 @@ interface AlbumCardProps {
 
 const AlbumCard: React.FC<AlbumCardProps> = ({ album, onOpenAlbum }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const rootRef = useRef<HTMLDivElement | null>(null);
 
     return (
-        <div className="album-card" onClick={() => onOpenAlbum(album.name)} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <div ref={rootRef} className={`album-card`} onClick={() => onOpenAlbum(album.metadata.code)}>
             <div className='collapsed'>
                 <span className='code'>#{album.metadata.code}</span>
             </div>

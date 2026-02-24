@@ -14,7 +14,7 @@
     overflow: hidden;
     transition: border-color 220ms ease, box-shadow 220ms ease, transform 160ms ease, max-height 320ms ease;
 
-    &:hover {
+    &:not(.scrolling):hover {
         border-color: var(--accent-color);
         cursor: pointer;
         box-shadow: 0 6px 20px rgba(0,0,0,0.06);

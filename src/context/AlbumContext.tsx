@@ -57,8 +57,8 @@ export const AlbumProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         return success
     };
 
-    const openAlbum = (albumName: string) => {
-        setCurrentAlbum(albumName);
+    const openAlbum = (code: string) => {
+        setCurrentAlbum(code);
     };
     
     const closeAlbum = () => {
