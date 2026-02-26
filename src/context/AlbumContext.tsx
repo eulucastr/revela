@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { generateAlbumCode, parseDate } from '../utils/albums';
+import type { Album } from '../types';
 
 interface AlbumContextType {
     libraryRoot: string | null;
     currentAlbum: string | null;
-    albums: { name: string, preview: string | null, metadata: { date: string, code: string } }[];
+    albums: Album[];
     loading: boolean;
     openAlbum: (albumName: string) => void;
     createAlbum: (newAlbumName: string) => Promise<boolean>;
@@ -16,7 +17,7 @@ const AlbumContext = createContext<AlbumContextType | undefined>(undefined);
 export const AlbumProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [libraryRoot, setLibraryRoot] = useState<string | null>(null);
     const [currentAlbum, setCurrentAlbum] = useState<string | null>(null);
-    const [albums, setAlbums] = useState<{ name: string, preview: string | null, metadata: { date: string, code: string } }[]>([]);
+    const [albums, setAlbums] = useState<Album[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchAlbums = async () => {
@@ -26,11 +27,12 @@ export const AlbumProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
         // Ordenar por data decrescente
         const sortedList = [...list].sort((a, b) => {
-            const dateA = a.metadata?.date ? parseDate(a.metadata.date) : new Date(0);
-            const dateB = b.metadata?.date ? parseDate(b.metadata.date) : new Date(0);
+            const dateA = a.date ? parseDate(a.date) : new Date(0);
+            const dateB = b.date ? parseDate(b.date) : new Date(0);
             return dateB.getTime() - dateA.getTime();
         });
 
+        console.log('Álbuns carregados:', sortedList);
         setAlbums(sortedList);
         setLoading(false);
     };
@@ -40,18 +42,22 @@ export const AlbumProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
         const date = new Date();
         const code = generateAlbumCode(newAlbumName, date);
-        const metadata = {
-            date: date.toLocaleString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            }),
-            code: code
+        const dateStr = date.toLocaleString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const albumData: Album = {
+            code,
+            name: newAlbumName,
+            date: dateStr
         };
 
-        const success = await window.electronAPI.createAlbum(libraryRoot, newAlbumName, metadata);
+        console.log('Criando álbum com dados:', albumData);
+        const success = await window.electronAPI.createAlbum(libraryRoot, albumData);
 
         if (success) fetchAlbums();
         return success

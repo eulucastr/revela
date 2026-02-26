@@ -1,30 +1,23 @@
 import React, { useEffect, useState, useRef } from 'react';
 import '../styles/components/AlbumCard.scss';
+import type { Album } from '../types';
 
 interface AlbumCardProps {
-    album: {
-        name: string;
-        preview: string | null;
-        metadata: {
-            date: string | null;
-            code: string | null;
-        };
-    };
-    onOpenAlbum: (name: string) => void;
+    album: Album,
+    onOpenAlbum: (code: string) => void;
 }
 
 const AlbumCard: React.FC<AlbumCardProps> = ({ album, onOpenAlbum }) => {
-    const [isHovered, setIsHovered] = useState(false);
     const rootRef = useRef<HTMLDivElement | null>(null);
 
     return (
-        <div ref={rootRef} className={`album-card`} onClick={() => onOpenAlbum(album.metadata.code)}>
+        <div ref={rootRef} className={`album-card`} onClick={() => onOpenAlbum(album.code)}>
             <div className='collapsed'>
-                <span className='code'>#{album.metadata.code}</span>
+                <span className='code'>#{album.code}</span>
             </div>
 
             <div className="expanded">
-                <p className="album-date">{album.metadata.date?.split(',')[0]}</p>
+                <p className="album-date">{album.date?.split(',')[0]}</p>
                 <h3 className="album-name">{album.name}</h3>
             </div>
             

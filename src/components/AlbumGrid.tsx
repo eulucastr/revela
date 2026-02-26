@@ -22,14 +22,14 @@ const Dashboard: React.FC = () => {
                         <div className='odd-column column'>
                             {
                                 albums.filter((_, index) => index % 2 === 0).map(album => (
-                                    <AlbumCard key={album.name} album={album} onOpenAlbum={openAlbum} />
+                                    <AlbumCard key={album.code} album={album} onOpenAlbum={openAlbum} />
                                 ))
                             }
                         </div>
                         <div className='even-column column'>
                             {
                                 albums.filter((_, index) => index % 2 !== 0).map(album => (
-                                    <AlbumCard key={album.name} album={album} onOpenAlbum={openAlbum} />
+                                    <AlbumCard key={album.code} album={album} onOpenAlbum={openAlbum} />
                                 ))
                             }
                         </div> 

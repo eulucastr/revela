@@ -33,6 +33,7 @@ app.whenReady().then(() => {
 });
 
 import { pathToFileURL } from 'url';
+import { Album } from './types';
 
 const createWindow = () => {
   // Create the browser window.
@@ -72,29 +73,25 @@ ipcMain.handle('list-albums', async (event: any, libraryPath: string) => {
     const folders = fs.readdirSync(libraryPath, { withFileTypes: true })
       .filter((dirent: fs.Dirent) => dirent.isDirectory() && !dirent.name.startsWith('.'))
       .map((dirent: fs.Dirent) => {
-        const albumName = dirent.name;
-        const albumPath = path.join(libraryPath, albumName);
+        const code = dirent.name; // folder name is the code
+        const albumPath = path.join(libraryPath, code);
 
-        // Find the first photo for preview
-        const photos = fs.readdirSync(albumPath, { withFileTypes: true })
-          .filter((f: fs.Dirent) => f.isFile() && /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name))
-          .map((f: fs.Dirent) => f.name);
-
-        // Read metadata if available
-        let metadata: { date: string | null; code: string | null } = { date: null, code: null };
+        // Check if metadata exists - skip album if it doesn't
         const metaFile = path.join(albumPath, '.meta', 'album.json');
-        if (fs.existsSync(metaFile)) {
-          const content = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
-          metadata.date = content.date || null;
-          metadata.code = content.code || null;
+        if (!fs.existsSync(metaFile)) {
+          return null;
         }
 
+        // Read metadata
+        const content = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
+
         return {
-          name: albumName,
-          preview: photos.length > 0 ? path.join(albumPath, photos[0]) : null,
-          metadata
+          code: code,
+          name: content.name || code,
+          date: content.date || null
         };
-      });
+      })
+      .filter((album) => album !== null);
     return folders;
   } catch (error) {
     console.error('Failed to list albums:', error);
@@ -102,11 +99,15 @@ ipcMain.handle('list-albums', async (event: any, libraryPath: string) => {
   }
 });
 
-ipcMain.handle('create-album', async (event: any, { libraryPath, name, metadata }: { libraryPath: string, name: string, metadata: any }) => {
+interface CreateAlbumParams {
+  libraryPath: string;
+  albumData: Album;
+}
+ipcMain.handle('create-album', async (event: any, { libraryPath, albumData }: CreateAlbumParams) => {
   try {
-    const albumPath = path.join(libraryPath, name);
+    console.log('Creating album at path:', albumData);
+    const albumPath = path.join(libraryPath, albumData.code);
     const metaPath = path.join(albumPath, '.meta');
-
     if (!fs.existsSync(albumPath)) {
       fs.mkdirSync(albumPath);
     }
@@ -116,8 +117,9 @@ ipcMain.handle('create-album', async (event: any, { libraryPath, name, metadata 
       fs.writeFileSync(path.join(metaPath, 'album.json'), JSON.stringify({
         photos: [],
         template: 'default',
-        date: metadata?.date,
-        code: metadata?.code
+        code: albumData.code,
+        name: albumData.name,
+        date: albumData.date
       }, null, 2));
       fs.writeFileSync(path.join(metaPath, 'captions.json'), JSON.stringify({}));
     }

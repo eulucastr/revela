@@ -79,7 +79,8 @@ const AlbumView: React.FC = () => {
                     photos: newOrder,
                     template: 'default',
                     date: '',
-                    code: ''
+                    code: '',
+                    name: ''
                 });
 
                 return newOrder;
